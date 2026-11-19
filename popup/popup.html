@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeSwitch</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>SafeSwitch</h1>
+    <div class="header-actions">
+      <button id="btn-tab" class="icon-btn" title="Open in a full tab" hidden>Open in tab</button>
+      <button id="btn-lock" class="icon-btn" title="Lock the vault now" hidden>Lock</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" role="status" hidden></div>
+
+  <main id="view"></main>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+node_modules/
+*.zip
+# never commit exported vaults or anything containing cookies
+safeswitch-vault-*.json
+*.vault.json
+.DS_Store
