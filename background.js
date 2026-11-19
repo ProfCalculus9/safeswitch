@@ -18,6 +18,13 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === service.ALARM_NAME) service.lock();
 });
 
+// Show the getting-started guide once, right after a fresh install.
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    chrome.tabs.create({ url: chrome.runtime.getURL('popup/help.html') });
+  }
+});
+
 // The in-memory key is wiped when the browser closes; make that explicit.
 chrome.runtime.onStartup.addListener(() => {
   service.lock();

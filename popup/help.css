@@ -1,0 +1,131 @@
+:root {
+  --bg: #ffffff;
+  --panel: #f4f5f7;
+  --text: #1c1e21;
+  --muted: #5b616b;
+  --border: #d6d9de;
+  --accent: #2f5fd0;
+  --accent-text: #ffffff;
+  --note-bg: #fff4d6;
+  --note-text: #4a3700;
+  --tip-bg: #e8f0fe;
+  --tip-text: #14306e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17181b;
+    --panel: #212327;
+    --text: #e8e9ec;
+    --muted: #a0a6af;
+    --border: #35383e;
+    --accent: #7ea1ff;
+    --accent-text: #0d1424;
+    --note-bg: #3a2e0a;
+    --note-text: #ffe29a;
+    --tip-bg: #16264a;
+    --tip-text: #c9d9ff;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.doc { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; }
+.lead { font-size: 18px; color: var(--muted); margin: 0 0 24px; }
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 12px 16px;
+  background: var(--panel);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.toc strong { color: var(--muted); font-weight: 600; }
+
+a { color: var(--accent); }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+h2 { font-size: 22px; margin: 40px 0 12px; padding-top: 24px; border-top: 1px solid var(--border); }
+h3 { font-size: 17px; margin: 0 0 4px; }
+p { margin: 0 0 12px; }
+ul { margin: 0 0 12px; padding-left: 22px; }
+li + li { margin-top: 4px; }
+
+ol.steps { list-style: none; margin: 16px 0; padding: 0; counter-reset: step; }
+ol.steps > li { counter-increment: step; position: relative; padding: 0 0 26px 54px; margin: 0; }
+ol.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ol.steps > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 42px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border);
+}
+
+.shot {
+  display: block;
+  margin: 12px 0 0;
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.note, .tip { border-radius: 10px; padding: 12px 16px; margin: 16px 0; }
+.note { background: var(--note-bg); color: var(--note-text); }
+.tip { background: var(--tip-bg); color: var(--tip-text); }
+.note p:last-child, .tip p:last-child { margin-bottom: 0; }
+
+.btn {
+  font-weight: 600;
+  font-size: 0.92em;
+  padding: 1px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+details { border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 8px 0; background: var(--panel); }
+details > summary { cursor: pointer; font-weight: 600; }
+details[open] > summary { margin-bottom: 8px; }
+details p:last-child { margin-bottom: 0; }
+
+footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+
+@media (max-width: 520px) {
+  .doc { padding: 24px 16px 60px; }
+  h1 { font-size: 26px; }
+  ol.steps > li { padding-left: 46px; }
+}

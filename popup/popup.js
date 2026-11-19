@@ -6,6 +6,7 @@ const view = document.getElementById('view');
 const banner = document.getElementById('banner');
 const btnLock = document.getElementById('btn-lock');
 const btnTab = document.getElementById('btn-tab');
+const btnHelp = document.getElementById('btn-help');
 
 const IN_TAB = new URLSearchParams(location.search).has('tab');
 if (IN_TAB) document.body.classList.add('tab-mode');
@@ -100,8 +101,8 @@ function renderCreate() {
         try {
           await busy(go, () => send('createVault', { passphrase: pass.value }));
           pass.value = pass2.value = '';
-          clearBanner();
           render();
+          say('ok', 'Vault created. New here? Press Help (top right) for a 2-minute guide.');
         } catch (err) {
           say('err', err.message);
         }
@@ -131,6 +132,17 @@ function renderImportOnly() {
   file.addEventListener('change', () => importFile(file));
 }
 
+async function forgotPassphrase() {
+  if (!confirm('A forgotten passphrase cannot be recovered. You can delete the vault and start again, but every session saved in it will be lost. Your current Reddit login in the browser is not affected.\n\nDelete the vault?')) return;
+  try {
+    await send('resetAll');
+    say('ok', 'Vault deleted. You can create a new one.');
+    render();
+  } catch (err) {
+    say('err', err.message);
+  }
+}
+
 function renderUnlock() {
   const pass = h('input', { type: 'password', id: 'unlock-pass', autocomplete: 'current-password' });
   const go = h('button', { class: 'primary full', type: 'submit' }, 'Unlock');
@@ -153,6 +165,7 @@ function renderUnlock() {
     },
     h('div', { class: 'field' }, h('label', { for: 'unlock-pass' }, 'Master passphrase'), pass),
     go,
+    h('div', { class: 'hint' }, h('button', { class: 'link', type: 'button', onclick: forgotPassphrase }, 'Forgot your passphrase?')),
   );
   view.replaceChildren(form);
   pass.focus();
@@ -206,7 +219,7 @@ async function renderMain(status) {
       'section',
       {},
       h('h2', {}, 'Accounts'),
-      data.accounts.length ? list : h('div', { class: 'empty' }, 'No accounts saved yet. Sign in to Reddit normally, then use "Save current session" below.'),
+      data.accounts.length ? list : h('div', { class: 'empty' }, 'No accounts saved yet. Sign in to Reddit normally, then use "Save current session" below. New here? Press Help (top right) for a 2-minute guide.'),
     ),
   );
 
@@ -404,6 +417,11 @@ btnLock.addEventListener('click', async () => {
 btnTab.addEventListener('click', () => {
   chrome.tabs.create({ url: chrome.runtime.getURL('popup/popup.html?tab=1') });
   window.close();
+});
+
+btnHelp.addEventListener('click', () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL('popup/help.html') });
+  if (!IN_TAB) window.close();
 });
 
 render();

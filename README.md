@@ -11,15 +11,22 @@ It never asks for, sees or stores your Reddit password. You sign in to Reddit no
 3. Click **Load unpacked** and choose the `safeswitch` folder (the one containing `manifest.json`).
 4. Pin the extension from the puzzle-piece menu.
 
-## Use
+## Quick start (about two minutes)
 
-1. Open the popup and create a vault with a master passphrase (10+ characters). **There is no recovery if you forget it.**
-2. Sign in to Reddit as usual, open the popup, press **Save current session**.
-3. To add another account: **Sign in to another account…** (signs the browser out; saved sessions stay in the vault), log in as the other account, then **Save current session**.
-4. Press **Switch** on any saved account. Open Reddit tabs reload.
-5. **Settings & backup**: auto-lock timer, encrypted export/import, change passphrase, delete vault.
+1. Click the SafeSwitch icon and create a vault with a master passphrase (10+ characters). Write it down: there is no recovery.
+2. Sign in to Reddit account 1 as usual. Open SafeSwitch, type a label (for example "Main") and press **Save current session**.
+3. Press **Sign in to another account...**. This clears Reddit's sign-in in this browser *without* using Reddit's own Log out, so account 1's session is not ended.
+4. Sign in to account 2, open SafeSwitch, type a different label and press **Save current session**.
+5. Press **Switch** next to either account whenever you like. Open Reddit tabs reload as that account.
 
-If the popup closes when a file picker opens, use **Open in tab** and do import/export from there.
+> **Used Reddit's own "Log out" on a saved account?** Reddit ends that session, so switching to it shows you as a guest. Sign in to that account again: SafeSwitch updates the saved copy the next time you switch away from it (or press **Save current session** to do it right away). After that, both accounts stay signed in.
+
+The **Help** button in the popup (also opened automatically on first install) has the full illustrated guide: step-by-step screenshots, everyday use, troubleshooting and backup.
+
+Other things you can do:
+- **Settings & backup**: auto-lock timer, encrypted export/import, change passphrase, delete vault.
+- Forgot your passphrase? Use **Forgot your passphrase?** on the unlock screen to delete the vault and start again.
+- If the popup closes when a file picker opens, use **Open in tab** and do import/export from there.
 
 ## How it works
 
@@ -59,7 +66,7 @@ Tested with unit tests and a real Chromium run using seeded cookies, but never a
 npm test        # 60 unit tests: crypto, cookie handling, vault service, message router
 ```
 
-No dependencies or build step. Files: `lib/crypto.js` (vault crypto), `lib/cookies.js` (capture/restore), `lib/service.js` (all vault logic), `lib/router.js` (popup messages), `background.js` (service worker), `popup/` (UI).
+No dependencies or build step. Files: `lib/crypto.js` (vault crypto), `lib/cookies.js` (capture/restore), `lib/service.js` (all vault logic), `lib/router.js` (popup messages), `background.js` (service worker), `popup/` (UI and the Help guide, `popup/help.html`).
 
 ## Privacy
 

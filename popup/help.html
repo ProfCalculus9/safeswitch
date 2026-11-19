@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeSwitch Help</title>
+  <link rel="stylesheet" href="help.css">
+</head>
+<body>
+<main class="doc">
+
+  <header>
+    <h1>SafeSwitch: getting started</h1>
+    <p class="lead">Keep two or more Reddit accounts signed in at the same time and switch between them with one click. Setting up takes about two minutes, and you only do it once.</p>
+  </header>
+
+  <nav class="toc" aria-label="On this page">
+    <strong>On this page:</strong>
+    <a href="#how">How it works</a>
+    <a href="#setup">Set up two accounts</a>
+    <a href="#daily">Everyday use</a>
+    <a href="#good">Good to know</a>
+    <a href="#help">Troubleshooting</a>
+    <a href="#backup">Backup</a>
+  </nav>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <p>When you sign in to Reddit, your browser keeps a sign-in "session". SafeSwitch saves a copy of that session for each account in an <strong>encrypted vault on your computer</strong>, protected by a master passphrase that only you know. Switching puts a saved session back, so Reddit sees you as that account.</p>
+    <p>SafeSwitch never sees or stores your Reddit password.</p>
+  </section>
+
+  <section id="setup">
+    <h2>Set up two accounts</h2>
+    <p>You will need to sign in to each account once. Have both Reddit usernames and passwords ready.</p>
+
+    <ol class="steps">
+      <li>
+        <h3>Create your vault</h3>
+        <p>Click the SafeSwitch icon in the toolbar. If you can't see it, open the puzzle-piece menu and pin it. Choose a master passphrase of 10 or more characters and press <span class="btn">Create vault</span>.</p>
+        <p><strong>Write the passphrase down somewhere safe.</strong> If you forget it, the vault cannot be recovered and you will have to start again.</p>
+        <img class="shot" src="help/1-create.png" alt="The SafeSwitch popup asking you to choose a master passphrase">
+      </li>
+
+      <li>
+        <h3>Sign in to account 1 and save it</h3>
+        <p>Go to reddit.com and sign in to your first account as usual (two-factor authentication works normally). Then click the SafeSwitch icon, type a name in <strong>Label</strong>, for example "Main", and press <span class="btn">Save current session</span>.</p>
+        <p>If you leave Label empty, SafeSwitch uses your Reddit username.</p>
+        <img class="shot" src="help/2-save.png" alt="The Save section of the popup with the label 'Main account' typed in">
+      </li>
+
+      <li>
+        <h3>Sign out the SafeSwitch way</h3>
+        <p>Press <span class="btn">Sign in to another account…</span>. SafeSwitch clears Reddit's sign-in from this browser <strong>without using Reddit's own Log out</strong>, so Reddit is not told to end account 1's session.</p>
+        <img class="shot" src="help/3-signout.png" alt="The 'Sign in to another account' button in the popup">
+        <div class="note">
+          <p><strong>Used Reddit's own "Log out" instead?</strong> That works too, but Reddit then ends that session for good. When you later switch to that account, Reddit shows you as a guest. This is easy to repair: see <a href="#guest">"Reddit shows me as a guest after switching"</a> below.</p>
+        </div>
+      </li>
+
+      <li>
+        <h3>Sign in to account 2 and save it</h3>
+        <p>On reddit.com, sign in to your second account. Click the SafeSwitch icon, type a <em>different</em> label, for example "Second", and press <span class="btn">Save current session</span>.</p>
+      </li>
+
+      <li>
+        <h3>Switch with one click</h3>
+        <p>Both accounts now appear in the list. The one you are using is marked <strong>current</strong>. Press <span class="btn">Switch</span> next to the other one and every open Reddit tab reloads as that account.</p>
+        <img class="shot" src="help/4-switch.png" alt="The account list showing two saved accounts, one marked current and one with a Switch button">
+      </li>
+    </ol>
+
+    <div class="tip">
+      <p><strong>That's it.</strong> From now on, both accounts stay signed in, and you can switch back and forth whenever you like.</p>
+    </div>
+  </section>
+
+  <section id="daily">
+    <h2>Everyday use</h2>
+    <ul>
+      <li><strong>Switch:</strong> click the SafeSwitch icon, then <span class="btn">Switch</span> next to the account you want.</li>
+      <li><strong>Add another account:</strong> press <span class="btn">Sign in to another account…</span>, sign in to the new account on Reddit, then press <span class="btn">Save current session</span>.</li>
+      <li><strong>Remove an account:</strong> press <span class="btn">Remove</span>. This only deletes the saved copy from the vault. Your Reddit account itself is not touched.</li>
+      <li><strong>Lock and unlock:</strong> the vault locks by itself after 15 minutes of inactivity (you can change this under <em>Settings &amp; backup</em>) and whenever you close the browser. Press <span class="btn">Lock</span> to lock it now. Locking does not sign you out of Reddit. You type your passphrase to unlock the vault again.</li>
+    </ul>
+  </section>
+
+  <section id="good">
+    <h2>Good to know</h2>
+    <ul>
+      <li><strong>Use "Sign in to another account…" instead of Reddit's Log out</strong> for accounts you have saved. Reddit's Log out ends the session on Reddit's side and the saved copy stops working.</li>
+      <li><strong>One account at a time per browser.</strong> Switching changes the account for the whole browser, so all your Reddit tabs show the same account.</li>
+      <li><strong>SafeSwitch keeps the saved copy fresh.</strong> When you switch away from an account it recognises, it saves that account's latest session first.</li>
+      <li><strong>Sessions can end.</strong> Changing your Reddit password, using "log out of all sessions", or simply a long time passing can end a saved session. Sign in again and press <span class="btn">Save current session</span>.</li>
+      <li><strong>The "not saved" warning protects you.</strong> If you are signed in to an account that isn't in the vault, SafeSwitch warns you before switching, because switching would sign that account out and its session would be lost. Press Cancel, press <span class="btn">Save current session</span>, then switch.</li>
+    </ul>
+  </section>
+
+  <section id="help">
+    <h2>Troubleshooting</h2>
+
+    <details id="guest">
+      <summary>Reddit shows me as a guest after switching</summary>
+      <p>Reddit has ended that account's saved session. This usually happens if you used Reddit's own Log out, or Reddit signed the session out for security reasons.</p>
+      <p><strong>Fix:</strong> sign in to that account again on reddit.com. SafeSwitch recognises it and updates the saved copy the next time you switch away from it. If the account list says "username unknown", press <span class="btn">Save current session</span> after signing in instead. After this one-time repair, both accounts stay signed in.</p>
+    </details>
+
+    <details>
+      <summary>"No signed-in Reddit session found" when saving</summary>
+      <p>SafeSwitch can only save an account you are currently signed in to in this browser. Open reddit.com, make sure you are signed in (reload the page if needed), then press <span class="btn">Save current session</span> again.</p>
+    </details>
+
+    <details>
+      <summary>The list says "username unknown"</summary>
+      <p>SafeSwitch asks Reddit which account is signed in. If that request fails (for example when you are offline), it can't show the username. Saving and switching still work. You only need to type a label yourself when saving.</p>
+    </details>
+
+    <details>
+      <summary>I forgot my master passphrase</summary>
+      <p>It can't be recovered, because the vault is encrypted with it. On the unlock screen press <span class="btn">Forgot your passphrase?</span> to delete the vault and start again. You will need to sign in to your accounts and save them again. Your current Reddit login in the browser is not affected.</p>
+    </details>
+
+    <details>
+      <summary>The popup closes when I pick a backup file</summary>
+      <p>Some browsers close small popups when a file picker opens. Press <span class="btn">Open in tab</span> at the top of the popup and import or export from the full-tab version.</p>
+    </details>
+  </section>
+
+  <section id="backup">
+    <h2>Backup and moving to another computer</h2>
+    <ul>
+      <li><strong>Export:</strong> open <em>Settings &amp; backup</em> and press <span class="btn">Export encrypted vault</span>. You get a file that is useless without your passphrase.</li>
+      <li><strong>Import:</strong> on the other computer, install SafeSwitch, then press <em>Import it</em> on the first screen (or use <em>Settings &amp; backup</em>) and choose the file. Unlock it with the passphrase it was created with.</li>
+      <li>Saved sessions can expire over time, so an old backup may need accounts re-saved.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>SafeSwitch keeps everything on your device and sends nothing to its developer. <a href="https://github.com/ProfCalculus9/safeswitch/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy policy</a> &middot; <a href="https://github.com/ProfCalculus9/safeswitch/issues" target="_blank" rel="noopener noreferrer">Report a problem</a></p>
+    <p>SafeSwitch is an independent project and is not affiliated with or endorsed by Reddit.</p>
+  </footer>
+
+</main>
+</body>
+</html>
