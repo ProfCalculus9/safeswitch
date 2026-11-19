@@ -15,7 +15,7 @@ It never asks for, sees or stores your Reddit password. You sign in to Reddit no
 
 1. Click the SafeSwitch icon and create a vault with a master passphrase (10+ characters). Write it down: there is no recovery.
 2. Sign in to Reddit account 1 as usual. Open SafeSwitch, type a label (for example "Main") and press **Save current session**.
-3. Press **Sign in to another account...**. This clears Reddit's sign-in in this browser *without* using Reddit's own Log out, so account 1's session is not ended.
+3. Press **Sign in to another account...**. This clears Reddit's sign-in in this browser *without* using Reddit's own Log out, so account 1's session is not ended. Your open Reddit tabs reload signed out; click **Log In** there (or go to reddit.com/login).
 4. Sign in to account 2, open SafeSwitch, type a different label and press **Save current session**.
 5. Press **Switch** next to either account whenever you like. Open Reddit tabs reload as that account.
 

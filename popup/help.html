@@ -52,6 +52,7 @@
       <li>
         <h3>Sign out the SafeSwitch way</h3>
         <p>Press <span class="btn">Sign in to another account…</span>. SafeSwitch clears Reddit's sign-in from this browser <strong>without using Reddit's own Log out</strong>, so Reddit is not told to end account 1's session.</p>
+        <p>Your open Reddit tabs reload and show you signed out. (Reddit shares one sign-in across the whole browser, which is why a new tab keeps you signed in as the same account until you do this.)</p>
         <img class="shot" src="help/3-signout.png" alt="The 'Sign in to another account' button in the popup">
         <div class="note">
           <p><strong>Used Reddit's own "Log out" instead?</strong> That works too, but Reddit then ends that session for good. When you later switch to that account, Reddit shows you as a guest. This is easy to repair: see <a href="#guest">"Reddit shows me as a guest after switching"</a> below.</p>
@@ -60,7 +61,7 @@
 
       <li>
         <h3>Sign in to account 2 and save it</h3>
-        <p>On reddit.com, sign in to your second account. Click the SafeSwitch icon, type a <em>different</em> label, for example "Second", and press <span class="btn">Save current session</span>.</p>
+        <p>On any Reddit tab, click <strong>Log In</strong> (or go to reddit.com/login) and sign in to your second account. Then click the SafeSwitch icon, type a <em>different</em> label, for example "Second", and press <span class="btn">Save current session</span>.</p>
       </li>
 
       <li>
@@ -103,6 +104,11 @@
       <summary>Reddit shows me as a guest after switching</summary>
       <p>Reddit has ended that account's saved session. This usually happens if you used Reddit's own Log out, or Reddit signed the session out for security reasons.</p>
       <p><strong>Fix:</strong> sign in to that account again on reddit.com. SafeSwitch recognises it and updates the saved copy the next time you switch away from it. If the account list says "username unknown", press <span class="btn">Save current session</span> after signing in instead. After this one-time repair, both accounts stay signed in.</p>
+    </details>
+
+    <details>
+      <summary>A new tab keeps me signed in as the same account</summary>
+      <p>Reddit shares one sign-in across the whole browser, so every tab, including reddit.com/login, shows the account you are currently using. To get a login page, press <span class="btn">Sign in to another account…</span> in SafeSwitch first. Your Reddit tabs reload signed out, and you can then click Log In (or open reddit.com/login).</p>
     </details>
 
     <details>
