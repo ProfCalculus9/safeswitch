@@ -53,12 +53,11 @@ Other things you can do:
 - Reddit revoking a session. Saved sessions expire like any login; re-save when that happens.
 - A compromised copy of this extension. It is a small unpacked codebase (about 1,100 lines, no dependencies) you can read end to end. Don't load modified copies from anywhere else.
 
-## Not yet verified against live Reddit
+## Live Reddit testing
 
-Tested with unit tests and a real Chromium run using seeded cookies, but never against the real reddit.com. Check these on first use:
-- **Login detection** treats the `reddit_session` cookie as "signed in". If saving says "No signed-in Reddit session found" while you are signed in, Reddit uses a different cookie name for your account type; that is a one-line change in `lib/cookies.js`.
-- **Username detection** (the me.json call). If it fails you just see "username unknown" and must type a label; saving and switching still work, but the unsaved-session warning is weaker.
-- **Session binding.** If Reddit ties a session to other signals and signs you out after a switch, saved sessions won't survive switching; separate Brave profiles would then be the safer approach.
+The user has successfully tested switching between two real Reddit accounts on live Reddit. This confirms that the account-switching flow worked in that test. It does not establish that every feature or account type has been tested against live Reddit.
+
+The live test did not cover all possible Reddit accounts or edge cases. If saving reports "No signed-in Reddit session found" while you are signed in, login detection may need to account for a different cookie name. If username detection (`me.json`) fails, the account can appear as "username unknown" and the unsaved-session warning is weaker. Reddit may also revoke or invalidate sessions independently of SafeSwitch; re-save an account if that happens.
 
 ## Develop
 
@@ -79,3 +78,4 @@ MIT, see [LICENSE](LICENSE).
 ## Disclaimer
 
 SafeSwitch is an independent project and is not affiliated with or endorsed by Reddit. It is provided as is; keep your master passphrase safe, because a forgotten passphrase cannot be recovered.
+
