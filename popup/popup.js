@@ -376,7 +376,7 @@ async function renderInstagramMain(status) {
   const newBtn = h('button', { class: 'full' }, 'Sign in to another Instagram account…');
   newBtn.addEventListener('click', () => igNewLogin(newBtn));
   sections.push(h('section', {}, newBtn,
-    h('p', { class: 'hint' }, 'Clears Instagram cookies in this browser profile without using Instagram Log out. Save your current session first.')
+    h('p', { class: 'hint' }, 'With permission, clears Instagram cookies and website storage without calling Instagram Log out. This may erase Instagram drafts and preferences; save your current session first.')
   ));
   sections.push(renderSettings(status));
   view.replaceChildren(...sections);
@@ -399,13 +399,23 @@ async function igSwitch(account, btn, force = false) {
 }
 
 async function igNewLogin(btn, force = false) {
+  // Explicit permission and confirmation are required: deleting Instagram
+  // origin storage can remove site preferences, saved drafts and offline data.
+  // No Facebook, Reddit, browser history or passwords are cleared.
+  if (!force) {
+    if (!confirm('Prepare a different Instagram login?\\n\\nThis will clear Instagram cookies and site storage (including local drafts/preferences) for instagram.com in this Brave profile. Saved SafeSwitch vault sessions stay encrypted. Other sites are not affected.\\n\\nContinue?')) return;
+  }
   try {
-    await busy(btn, () => send('instagramPrepareLogin', { force }));
-    say('ok', 'Instagram cookies cleared. Sign in to your next account, then save its session.');
+    // The permissions prompt must start from the user click, before other
+    // async work. It is needed only for this origin-scoped cleanup action.
+    const granted = await chrome.permissions.request({ permissions: ['browsingData'] });
+    if (!granted) return say('warn', 'Site-data cleanup permission was declined. No session was changed.', true);
+    await busy(btn, () => send('instagramPrepareLogin', { force, clearSiteData: true }));
+    say('ok', 'Instagram cookies and site storage cleared. Sign in to your other account, then save it.');
     render();
   } catch (err) {
     if (err.code === 'UNSAVED_SESSION' && !force) {
-      if (confirm(err.message + '\\n\\nClear Instagram cookies anyway?')) {
+      if (confirm(err.message + '\\n\\nClear the unsaved Instagram session anyway?')) {
         return igNewLogin(btn, true);
       }
       return;
