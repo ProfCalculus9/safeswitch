@@ -4,8 +4,15 @@
   "version": "0.1.0",
   "description": "Switch Reddit accounts using an encrypted vault of session cookies. Never asks for or stores your password.",
   "minimum_chrome_version": "110",
-  "permissions": ["cookies", "storage", "alarms"],
-  "host_permissions": ["https://*.reddit.com/*"],
+  "permissions": [
+    "activeTab",
+    "cookies",
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://*.reddit.com/*"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
