@@ -13,7 +13,7 @@ It never asks for, sees or stores your Reddit password. You sign in to Reddit no
 
 ## Context-aware popup (preview)
 
-When clicked from a Reddit browser tab, SafeSwitch shows the existing Reddit account switcher. On Instagram, Facebook, and X tabs it recognizes the site but shows a coming-soon message; **those adapters are not implemented and SafeSwitch does not read their cookies**. On other tabs it prompts you to open a supported site. This first step is about routing the UI by active tab, not expanding the supported switching sites. Use the toolbar popup from the website tab (the Open in tab view cannot use its own extension tab as site context).
+When clicked from a Reddit browser tab, SafeSwitch shows the existing Reddit account switcher. On Instagram tabs, it offers an **experimental** Instagram adapter with explicit optional host permission and encrypted local cookie sessions. Facebook and X remain coming-soon; their cookies are never accessed. On other tabs it prompts you to open a supported site. Instagram switching only verifies restored cookies locally and has not been tested against Instagram's live server. Instagram may require reauthentication or revoke a stored session; use a test account first. Reddit cookies and legacy vault accounts are kept separate. Use the toolbar popup from the website tab (the Open in tab view cannot use its own extension tab as site context).
 
 ## Quick start (about two minutes)
 
@@ -62,6 +62,17 @@ Other things you can do:
 The user has successfully tested switching between two real Reddit accounts on live Reddit. This confirms that the account-switching flow worked in that test. It does not establish that every feature or account type has been tested against live Reddit.
 
 The live test did not cover all possible Reddit accounts or edge cases. If saving reports "No signed-in Reddit session found" while you are signed in, login detection may need to account for a different cookie name. If username detection (`me.json`) fails, the account can appear as "username unknown" and the unsaved-session warning is weaker. Reddit may also revoke or invalidate sessions independently of SafeSwitch; re-save an account if that happens.
+
+## Instagram experimental test (v0.2.0 prototype)
+
+1. Back up your vault using Settings & backup before testing.
+2. Open an Instagram tab and click SafeSwitch. Unlock the vault and enable Instagram cookie access when prompted.
+3. Sign in to Instagram normally and save the current session with an account label.
+4. Use **Sign in to another Instagram account**. This clears Instagram cookies locally without calling Instagram's Log out.
+5. Log in to another Instagram account, save its session, then try switching between the saved labels.
+6. Check the actual signed-in Instagram account after each switch. A local cookie check is **not** proof that Instagram accepted a session.
+
+**Known limitations:** This prototype only saves cookies for instagram.com and its subdomains. Sessions can depend on other browser storage or server-side authentication, so switching may fail. It does not implement Instagram profile-name detection (it identifies sessions by the `ds_user_id` cookie). It never accesses Facebook cookies. The **Open in tab** view cannot infer which website tab launched it, so use the toolbar popup for context detection.
 
 ## Develop
 
