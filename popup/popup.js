@@ -378,6 +378,18 @@ async function renderInstagramMain(status) {
   sections.push(h('section', {}, newBtn,
     h('p', { class: 'hint' }, 'With permission, clears Instagram cookies and website storage without calling Instagram Log out. This may erase Instagram drafts and preferences; save your current session first.')
   ));
+  const diagnosticBtn = h('button', { class: 'full' }, 'Check Instagram session status');
+  diagnosticBtn.addEventListener('click', async () => {
+    try {
+      const result = await busy(diagnosticBtn, () => send('instagramDiagnostics'));
+      say('warn', 'Instagram cookies: ' + result.cookieCount +
+        '. Signed-in cookie pair: ' + (result.signedInCookiePresent ? 'present' : 'absent') +
+        '. This check does not prove server-side login.', true);
+    } catch (err) { say('err', err.message, true); }
+  });
+  sections.push(h('section', { class: 'stack' }, h('h2', {}, 'Diagnostics'),
+    diagnosticBtn, h('p', { class: 'hint' },
+    'Reports counts only; never displays cookie values or passwords. Check immediately after cleanup and again if Instagram signs you in automatically.')));
   sections.push(renderSettings(status));
   view.replaceChildren(...sections);
 }
@@ -411,7 +423,7 @@ async function igNewLogin(btn, force = false) {
     const granted = await chrome.permissions.request({ permissions: ['browsingData'] });
     if (!granted) return say('warn', 'Site-data cleanup permission was declined. No session was changed.', true);
     await busy(btn, () => send('instagramPrepareLogin', { force, clearSiteData: true }));
-    say('ok', 'Instagram cookies and site storage cleared. Sign in to your other account, then save it.');
+    say('ok', 'Instagram cookies and site storage cleared. Open the Instagram tab to check whether a session reappears. Use Check Instagram session status to inspect the result.');
     render();
   } catch (err) {
     if (err.code === 'UNSAVED_SESSION' && !force) {
