@@ -113,6 +113,7 @@ async function render() {
   }
   if (!status.exists) return renderCreate();
   if (!status.unlocked) return renderUnlock();
+  if (site.id === 'instagram') return renderInstagramMain(status);
   return renderMain(status);
 }
 
@@ -297,6 +298,120 @@ async function renderMain(status) {
 
   sections.push(renderSettings(status));
   view.replaceChildren(...sections);
+}
+
+// Instagram deliberately requests cookie access only when the user chooses it.
+// Account switching remains opt-in and is not run on opening a website.
+const INSTAGRAM_ORIGINS = ['https://*.instagram.com/*'];
+
+async function renderInstagramMain(status) {
+  let permission = false;
+  try {
+    permission = await chrome.permissions.contains({ origins: INSTAGRAM_ORIGINS });
+  } catch (err) {
+    return view.replaceChildren(h('p', {}, 'Could not check Instagram permission: ' + err.message));
+  }
+  if (!permission) {
+    const grant = h('button', { class: 'primary full' }, 'Enable Instagram switching');
+    grant.addEventListener('click', async () => {
+      try {
+        const granted = await chrome.permissions.request({ origins: INSTAGRAM_ORIGINS });
+        if (!granted) return say('warn', 'Instagram permission was not granted.', true);
+        render();
+      } catch (err) { say('err', err.message, true); }
+    });
+    view.replaceChildren(h('section', { class: 'stack' },
+      h('h2', {}, 'Instagram · Experimental'),
+      h('p', {}, 'To save and switch Instagram sessions, allow access to Instagram cookies. Reddit stays independent.'),
+      grant,
+      h('p', { class: 'hint' }, 'Only instagram.com host permission is requested. Never grant account access to an extension you do not trust.')
+    ));
+    return;
+  }
+  let data;
+  try {
+    data = await send('instagramList');
+  } catch (err) {
+    say('err', err.message, true);
+    return;
+  }
+  const sections = [
+    h('div', { class: 'site-context' }, 'Instagram · Experimental'),
+    h('p', { class: 'hint' }, 'Switching restores encrypted session cookies locally. Instagram may still require reauthentication. Verify the displayed account after each switch.'),
+  ];
+  const list = h('ul', { class: 'accounts' });
+  for (const account of data.accounts) {
+    const active = data.activeId === account.id;
+    const switchBtn = h('button', { class: active ? '' : 'primary', disabled: active }, active ? 'Saved as active' : 'Switch');
+    switchBtn.addEventListener('click', () => igSwitch(account, switchBtn));
+    const removeBtn = h('button', { class: 'danger', title: 'Remove this saved Instagram account' }, 'Remove');
+    removeBtn.addEventListener('click', async () => {
+      if (!confirm('Remove "' + account.label + '" from the encrypted vault?')) return;
+      try {
+        await send('instagramRemove', { id: account.id });
+        render();
+      } catch (err) { say('err', err.message, true); }
+    });
+    list.append(h('li', { class: 'account' },
+      h('div', { class: 'meta' },
+        h('div', { class: 'name' }, account.label),
+        h('div', { class: 'sub' }, 'Instagram user ID: ' + account.userId + ' · saved ' + ago(account.savedAt))
+      ), switchBtn, removeBtn));
+  }
+  sections.push(h('section', {},
+    h('h2', {}, 'Instagram accounts'),
+    data.accounts.length ? list : h('div', { class: 'empty' },
+      'No Instagram accounts saved yet. Sign in to Instagram normally, then save this session below.')
+  ));
+  const label = h('input', { type: 'text', maxlength: '40', placeholder: 'Account label, e.g. Personal' });
+  const saveBtn = h('button', { class: 'primary full', type: 'submit' }, 'Save current Instagram session');
+  sections.push(h('form', { class: 'stack', onsubmit: async (event) => {
+    event.preventDefault();
+    try {
+      const result = await busy(saveBtn, () => send('instagramSave', { label: label.value }));
+      say('ok', result.updated ? 'Instagram session updated.' : 'Instagram session saved.');
+      render();
+    } catch (err) { say('err', err.message, true); }
+  } }, label, saveBtn));
+  const newBtn = h('button', { class: 'full' }, 'Sign in to another Instagram account…');
+  newBtn.addEventListener('click', () => igNewLogin(newBtn));
+  sections.push(h('section', {}, newBtn,
+    h('p', { class: 'hint' }, 'Clears Instagram cookies in this browser profile without using Instagram Log out. Save your current session first.')
+  ));
+  sections.push(renderSettings(status));
+  view.replaceChildren(...sections);
+}
+
+async function igSwitch(account, btn, force = false) {
+  try {
+    const result = await busy(btn, () => send('instagramSwitch', { id: account.id, force }));
+    say('ok', 'Cookies restored for ' + result.label + '. Check Instagram to confirm that you are logged in.');
+    render();
+  } catch (err) {
+    if (err.code === 'UNSAVED_SESSION' && !force) {
+      if (confirm(err.message + '\\n\\nSwitch anyway? The current unsaved session may be lost.')) {
+        return igSwitch(account, btn, true);
+      }
+      return;
+    }
+    say('err', err.message, true);
+  }
+}
+
+async function igNewLogin(btn, force = false) {
+  try {
+    await busy(btn, () => send('instagramPrepareLogin', { force }));
+    say('ok', 'Instagram cookies cleared. Sign in to your next account, then save its session.');
+    render();
+  } catch (err) {
+    if (err.code === 'UNSAVED_SESSION' && !force) {
+      if (confirm(err.message + '\\n\\nClear Instagram cookies anyway?')) {
+        return igNewLogin(btn, true);
+      }
+      return;
+    }
+    say('err', err.message, true);
+  }
 }
 
 async function doSwitch(account, btn, force = false) {
