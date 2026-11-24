@@ -2,6 +2,8 @@
 // messages to the background worker and renders the answers. All text is set
 // with textContent (never innerHTML), so account labels can't inject markup.
 
+import { matchSite } from '../lib/sites.js';
+
 const view = document.getElementById('view');
 const banner = document.getElementById('banner');
 const btnLock = document.getElementById('btn-lock');
@@ -9,6 +11,27 @@ const btnTab = document.getElementById('btn-tab');
 const btnHelp = document.getElementById('btn-help');
 
 const IN_TAB = new URLSearchParams(location.search).has('tab');
+
+async function getCurrentSite() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    return matchSite(tab?.url);
+  } catch {
+    return null;
+  }
+}
+
+function renderSiteNotice(site) {
+  const content = site
+    ? [h('h2', {}, site.name + ' support is coming'),
+       h('p', {}, 'SafeSwitch recognized ' + site.name + ', but its session adapter is not available yet. No cookies will be accessed or changed for this website.'),
+       h('p', { class: 'hint' }, 'Reddit is currently the only supported account switcher.')]
+    : [h('h2', {}, 'Open a supported website'),
+       h('p', {}, 'Open Reddit in the active browser tab, then click the SafeSwitch toolbar icon to manage Reddit accounts.'),
+       h('p', { class: 'hint' }, 'Instagram, Facebook and X adapters are planned, but not yet enabled.')];
+  view.replaceChildren(h('section', { class: 'stack' }, ...content));
+}
+
 if (IN_TAB) document.body.classList.add('tab-mode');
 
 // ---- helpers ---------------------------------------------------------------
@@ -81,6 +104,13 @@ async function render() {
   }
   btnLock.hidden = !status.unlocked;
   btnTab.hidden = IN_TAB;
+  // The popup's website context is determined by the current active tab.
+  // Never offer Reddit actions on another domain.
+  const site = await getCurrentSite();
+  if (!site || !site.enabled) {
+    renderSiteNotice(site);
+    return;
+  }
   if (!status.exists) return renderCreate();
   if (!status.unlocked) return renderUnlock();
   return renderMain(status);
@@ -181,7 +211,7 @@ async function renderMain(status) {
     return;
   }
 
-  const sections = [];
+  const sections = [h('div', { class: 'site-context' }, 'Reddit · reddit.com')];
 
   // Saved accounts
   const list = h('ul', { class: 'accounts' });

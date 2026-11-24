@@ -11,6 +11,10 @@ It never asks for, sees or stores your Reddit password. You sign in to Reddit no
 3. Click **Load unpacked** and choose the `safeswitch` folder (the one containing `manifest.json`).
 4. Pin the extension from the puzzle-piece menu.
 
+## Context-aware popup (preview)
+
+When clicked from a Reddit browser tab, SafeSwitch shows the existing Reddit account switcher. On Instagram, Facebook, and X tabs it recognizes the site but shows a coming-soon message; **those adapters are not implemented and SafeSwitch does not read their cookies**. On other tabs it prompts you to open a supported site. This first step is about routing the UI by active tab, not expanding the supported switching sites. Use the toolbar popup from the website tab (the Open in tab view cannot use its own extension tab as site context).
+
 ## Quick start (about two minutes)
 
 1. Click the SafeSwitch icon and create a vault with a master passphrase (10+ characters). Write it down: there is no recovery.
