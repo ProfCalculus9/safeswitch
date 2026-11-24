@@ -2,13 +2,13 @@
 // messages to the background worker and renders the answers. All text is set
 // with textContent (never innerHTML), so account labels can't inject markup.
 
+import { matchSite } from '../lib/sites.js';
+
 const view = document.getElementById('view');
 const banner = document.getElementById('banner');
 const btnLock = document.getElementById('btn-lock');
 const btnTab = document.getElementById('btn-tab');
 const btnHelp = document.getElementById('btn-help');
-
-import { matchSite } from '../lib/sites.js';
 
 const IN_TAB = new URLSearchParams(location.search).has('tab');
 
