@@ -74,6 +74,10 @@ The live test did not cover all possible Reddit accounts or edge cases. If savin
 
 **Known limitations:** Site storage is cleared to reduce automatic re-login but is not saved into the vault. Meta linked-account sign-in, server-side sessions and browser password managers can still sign you in automatically. This prototype only saves cookies for instagram.com and its subdomains. Sessions can depend on other browser storage or server-side authentication, so switching may fail. It does not implement Instagram profile-name detection (it identifies sessions by the `ds_user_id` cookie). It never accesses Facebook cookies. The **Open in tab** view cannot infer which website tab launched it, so use the toolbar popup for context detection.
 
+## Troubleshooting automatic Instagram re-login (v0.2.2)
+
+If Instagram immediately logs the same account back in after **Sign in to another Instagram account**, click **Check Instagram session status**. It reports only the number of Instagram cookies and whether the expected login-cookie pair exists; no cookie names, values, passwords, or private authentication data are displayed. Check before clearing, immediately after, and again when the account returns. The cleanup no longer automatically reloads open Instagram tabs. A separate Facebook/Meta login or Instagram itself may still recreate cookies. Do not repeatedly delete data if the browser keeps logging you back in. Test using a new Brave profile with no Instagram or Facebook logins to distinguish shared login behavior from the extension.
+
 ## Develop
 
 ```
