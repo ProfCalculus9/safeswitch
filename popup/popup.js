@@ -139,7 +139,7 @@ function renderCreate() {
         }
       },
     },
-    h('p', {}, 'Choose a master passphrase. It encrypts your saved Reddit sessions on this device. SafeSwitch never stores your Reddit passwords, and if you forget this passphrase the vault cannot be recovered.'),
+    h('p', {}, 'Choose a master passphrase. It encrypts your saved account sessions on this device. SafeSwitch never stores your site passwords, and if you forget this passphrase the vault cannot be recovered.'),
     h('div', { class: 'field' }, h('label', { for: 'p1' }, 'Master passphrase (10+ characters)'), pass),
     h('div', { class: 'field' }, h('label', { for: 'p2' }, 'Repeat passphrase'), pass2),
     go,
