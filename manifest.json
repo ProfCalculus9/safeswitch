@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SafeSwitch: Encrypted Account Switcher",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Encrypted Reddit account switcher with experimental Instagram session switching.",
   "minimum_chrome_version": "110",
   "permissions": [
