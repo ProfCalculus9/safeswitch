@@ -117,3 +117,15 @@ test('Instagram site-data cleanup fails safely without the browser API', async (
   );
   assert.equal(IG.identity(await IG.snapshot(fake.chrome)), '123');
 });
+
+test('Instagram diagnostics reveal counts without exposing cookie secrets', async () => {
+  const fake = createFakeChrome();
+  const service = createService({ chrome: fake.chrome });
+  await service.createVault('strong-test-passphrase');
+  loginInstagram(fake, '987');
+  const result = await service.instagramDiagnostics();
+  assert.deepEqual(Object.keys(result).sort(), ['cookieCount', 'signedInCookiePresent']);
+  assert.equal(result.cookieCount, 3);
+  assert.equal(result.signedInCookiePresent, true);
+  assert.equal(JSON.stringify(result).includes('session-987'), false);
+});
