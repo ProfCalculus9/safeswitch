@@ -68,11 +68,11 @@ The live test did not cover all possible Reddit accounts or edge cases. If savin
 1. Back up your vault using Settings & backup before testing.
 2. Open an Instagram tab and click SafeSwitch. Unlock the vault and enable Instagram cookie access when prompted.
 3. Sign in to Instagram normally and save the current session with an account label.
-4. Use **Sign in to another Instagram account**. This clears Instagram cookies locally without calling Instagram's Log out.
+4. Use **Sign in to another Instagram account**. The new prototype asks for explicit permission to clear Instagram cookies and website storage (localStorage, IndexedDB, cache storage and service workers) without calling Instagram's Log out. This may erase Instagram drafts or local preferences. It does not clear Facebook, Reddit, browser history or passwords.
 5. Log in to another Instagram account, save its session, then try switching between the saved labels.
 6. Check the actual signed-in Instagram account after each switch. A local cookie check is **not** proof that Instagram accepted a session.
 
-**Known limitations:** This prototype only saves cookies for instagram.com and its subdomains. Sessions can depend on other browser storage or server-side authentication, so switching may fail. It does not implement Instagram profile-name detection (it identifies sessions by the `ds_user_id` cookie). It never accesses Facebook cookies. The **Open in tab** view cannot infer which website tab launched it, so use the toolbar popup for context detection.
+**Known limitations:** Site storage is cleared to reduce automatic re-login but is not saved into the vault. Meta linked-account sign-in, server-side sessions and browser password managers can still sign you in automatically. This prototype only saves cookies for instagram.com and its subdomains. Sessions can depend on other browser storage or server-side authentication, so switching may fail. It does not implement Instagram profile-name detection (it identifies sessions by the `ds_user_id` cookie). It never accesses Facebook cookies. The **Open in tab** view cannot infer which website tab launched it, so use the toolbar popup for context detection.
 
 ## Develop
 
