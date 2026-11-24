@@ -84,3 +84,36 @@ test('Restore failure attempts cookie rollback', async () => {
   // Importantly, a failed operation must not mark the target account active.
   assert.equal((await service.instagramList()).activeId !== target.id, true);
 });
+
+test('Instagram prepare-login removes only selected origin storage when opted in', async () => {
+  const fake = createFakeChrome();
+  const calls = [];
+  fake.chrome.browsingData = {
+    async remove(options, types) { calls.push({ options, types }); }
+  };
+  const service = createService({ chrome: fake.chrome });
+  await service.createVault('strong-test-passphrase');
+  loginInstagram(fake, '543');
+  await service.instagramSave({ label: 'Private' });
+  await service.instagramPrepareLogin({ clearSiteData: true });
+  assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0].options.origins, ['https://www.instagram.com', 'https://instagram.com']);
+  assert.deepEqual(calls[0].types, {
+    localStorage: true, indexedDB: true, cacheStorage: true, serviceWorkers: true,
+  });
+  assert.equal((await IG.snapshot(fake.chrome)).length, 0);
+  assert.equal((await service.instagramList()).accounts.length, 1);
+});
+
+test('Instagram site-data cleanup fails safely without the browser API', async () => {
+  const fake = createFakeChrome();
+  const service = createService({ chrome: fake.chrome });
+  await service.createVault('strong-test-passphrase');
+  loginInstagram(fake, '123');
+  await service.instagramSave({ label: 'Test' });
+  await assert.rejects(
+    () => service.instagramPrepareLogin({ clearSiteData: true }),
+    { code: 'UNSUPPORTED' }
+  );
+  assert.equal(IG.identity(await IG.snapshot(fake.chrome)), '123');
+});
